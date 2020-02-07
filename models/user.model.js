@@ -18,14 +18,12 @@ const userSchema = new mongoose.Schema(
 		},
 		password: {
 			type: String,
-      required: [true, "Password is required"],
-      minlength: [8, "Password must be at least 8 characters long"]
-    },
-    profilePic: {
-      type: String, 
-      
-
-    },
+			required: [true, "Password is required"],
+			minlength: [8, "Password must be at least 8 characters long"],
+		},
+		profilePic: {
+			type: String,
+		},
 
 		// Another model for organizations should be included later on
 
@@ -49,13 +47,12 @@ const userSchema = new mongoose.Schema(
 			ref: "Folders",
 		},
 		saved_news: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "News"
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "News",
 		},
 	},
 	{ timestamps: true }
 );
 
-
-const User = mongoose.model("User", userSchema)
-module.exports = User
+const User = mongoose.model("User", userSchema);
+module.exports = User;
