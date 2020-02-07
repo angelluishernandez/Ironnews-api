@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const InterestsList = require("../constants/interests");
+require("./news.model")
+require("./folder.model")
 
 const EMAIL_PATTERN = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
