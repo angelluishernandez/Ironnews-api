@@ -45,14 +45,14 @@ const userSchema = new mongoose.Schema(
 			enum: InterestsList,
 		},
 		filters: [String],
-		// folders: {
-		// 	type: mongoose.Schema.Types.ObjectId,
-		// 	ref: "Folders",
-		// },
-		// saved_news: {
-		// 	type: mongoose.Schema.Types.ObjectId,
-		// 	ref: "News",
-		// },
+		folders: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Folders",
+		},
+		saved_news: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "News",
+		}
 	},
 	{ timestamps: true }
 );

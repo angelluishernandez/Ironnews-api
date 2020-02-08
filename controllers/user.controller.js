@@ -44,29 +44,28 @@ module.exports.doLogin = (req, res, next) => {
 		.catch(next);
 };
 
-
-
 module.exports.logout = (req, res, next) => {
-	req.session.destroy()
-	// res.clearCookie("connect.sid")
-	if(!req.session){
-		console.log("Logged out")
+	req.session.destroy();
+	res.clearCookie("connect.sid")
+	if (!req.session) {
+		console.log("Logged out");
 	}
+};
 
-
-}
+module.exports.showDetails = (req, res, next) => {
+	User.findById(req.params.id)
+		.then(user => res.json(user))
+		.catch(error => console.log(error));
+};
 
 module.exports.editUser = (req, res, next) => {
-	const userId = req.params.id
-	const {name, email, password, profilePic, organization, collaborators, interests, filters} = req.body
-	userModel = {name, email, password, profilePic=req.file ? req.file.url : null, organization, collaborators, interests, filters}
-	User.findByIdAndUpdate(userId, userModel, {new: true}).then(user => 
-		res.json(user)
+	console.log(req.body.name)
 
-
-
-	).catch(error=> next(error))
-
-
-
-}
+	User.findByIdAndUpdate(req.params.id, req.body)
+		.then(user => {
+			console.log(user);
+			user.save()
+			res.json(user);
+		})
+		.catch(error => next(error));
+};
