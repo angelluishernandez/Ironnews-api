@@ -6,6 +6,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const cors = require('./config/cors.config');
+const session = require('./config/session.config');
 
 /**
  * DB config
@@ -16,11 +17,14 @@ require('./config/db.config');
  * Configure express
  */
 const app = express();
-app.use(cors);
+app.use(cors)
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session);
+
 
 /**
  * Configure routes
@@ -32,6 +36,13 @@ app.use('/', router);
 app.use(function (req, res, next) {
     next(createError(404));
 });
+
+// Configure user
+
+app.use = (req, res, next) => {
+    req.currentUser = req.session.user
+    next()
+}
 
 // error handler
 app.use(function (error, req, res, next) {
