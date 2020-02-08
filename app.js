@@ -2,11 +2,13 @@ require('dotenv').config();
 
 const createError = require('http-errors');
 const express = require('express');
+const path = require("path")
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-const cors = require('./config/cors.config');
 const session = require('./config/session.config');
+const cors = require('./config/cors.config')
+
 
 /**
  * DB config
@@ -39,10 +41,10 @@ app.use(function (req, res, next) {
 
 // Configure user
 
-app.use = (req, res, next) => {
+app.use ((req, _, next) => {
     req.currentUser = req.session.user
     next()
-}
+})
 
 // error handler
 app.use(function (error, req, res, next) {

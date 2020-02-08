@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema(
 			trim: true,
 			lowercase: true,
 			match: [EMAIL_PATTERN, "Email is required"],
+			unique: true
 		},
 		password: {
 			type: String,
@@ -42,17 +43,16 @@ const userSchema = new mongoose.Schema(
 		interests: {
 			type: String,
 			enum: InterestsList,
-			default: null,
 		},
 		filters: [String],
-		folders: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Folders",
-		},
-		saved_news: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "News",
-		},
+		// folders: {
+		// 	type: mongoose.Schema.Types.ObjectId,
+		// 	ref: "Folders",
+		// },
+		// saved_news: {
+		// 	type: mongoose.Schema.Types.ObjectId,
+		// 	ref: "News",
+		// },
 	},
 	{ timestamps: true }
 );
