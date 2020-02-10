@@ -1,6 +1,17 @@
 const User = require("../models/user.model");
 const createError = require("http-errors");
 
+
+// LIST USERS 
+
+
+module.exports.getUsers = (req, res, next) => {
+	User.find()
+		.then(users => res.json(users))
+		.catch(next);
+};
+
+
 //CREATE USER
 
 module.exports.create = (req, res, next) => {
