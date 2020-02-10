@@ -12,7 +12,8 @@ router.post("/register", upload.single("profilePic"), authMiddleware.isNotAuthen
 router.post("/login", authMiddleware.isNotAuthenticated, userController.doLogin)
 router.post("/logout", authMiddleware.isAuthenticated, userController.logout)
 router.get("/user/:id", authMiddleware.isAuthenticated, userController.showDetails)
-router.patch("/user/:id", authMiddleware.isAuthenticated, userController.editUser)
+router.patch("/user/:id", upload.single("profilePic"), authMiddleware.isAuthenticated, userController.editUser)
+router.delete("/user/:id", authMiddleware.isAuthenticated, userController.deleteUser)
 
 
 

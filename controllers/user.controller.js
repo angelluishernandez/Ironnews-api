@@ -1,6 +1,8 @@
 const User = require("../models/user.model");
 const createError = require("http-errors");
 
+//CREATE USER
+
 module.exports.create = (req, res, next) => {
 	const user = new User({
 		name: req.body.name,
@@ -19,6 +21,9 @@ module.exports.create = (req, res, next) => {
 		.then(user => res.status(202).json(user))
 		.catch(next);
 };
+
+//USER LOGIN
+
 
 module.exports.doLogin = (req, res, next) => {
 	const { email, password } = req.body;
@@ -44,13 +49,20 @@ module.exports.doLogin = (req, res, next) => {
 		.catch(next);
 };
 
+//USER LOGOUT
+
+
 module.exports.logout = (req, res, next) => {
 	req.session.destroy();
-	res.clearCookie("connect.sid")
+	res.clearCookie("connect.sid");
 	if (!req.session) {
 		console.log("Logged out");
 	}
 };
+
+// USER DETAILS
+
+
 
 module.exports.showDetails = (req, res, next) => {
 	User.findById(req.params.id)
@@ -58,14 +70,45 @@ module.exports.showDetails = (req, res, next) => {
 		.catch(error => console.log(error));
 };
 
-module.exports.editUser = (req, res, next) => {
-	console.log(req.body.name)
+// EDIT USER
 
-	User.findByIdAndUpdate(req.params.id, req.body)
+
+module.exports.editUser = (req, res, next) => {
+	const {
+		name,
+		email,
+		password,
+		profilePic,
+		organization,
+		collaborators,
+		interests,
+		filters,
+	} = req.body;
+	userModel = {
+		name,
+		email,
+		password,
+		profilePic: req.file ? req.file.url : null,
+		organization,
+		collaborators,
+		interests,
+		filters,
+	};
+	console.log(userModel);
+
+	User.findByIdAndUpdate(req.params.id, userModel, { new: true })
 		.then(user => {
 			console.log(user);
-			user.save()
 			res.json(user);
 		})
 		.catch(error => next(error));
+};
+
+// DELETE USER
+
+
+module.exports.deleteUser = (req, res, next) => {
+	User.deleteOne(req.params._id)
+		.then(user => console.log(`User named ${user.name} has been deleted`))
+		.catch(error => console.log(error));
 };
