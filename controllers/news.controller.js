@@ -12,9 +12,3 @@ module.exports.listNews = (req, res, next) => {
 		.catch(error => console.info(error));
 };
 
-module.exports.listFolders = (req, res, next) => {
-	Folders.find()
-		.populate("news")
-		.then(folder => res.json(folder))
-		.catch(error => console.info(error));
-};

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 require("./user.model");
 require("./news.model")
-const folderSchema = mongoose.Schema({
+const folderSchema = new mongoose.Schema({
 
   user: {
     type: mongoose.Schema.Types.ObjectId, 
@@ -16,6 +16,7 @@ const folderSchema = mongoose.Schema({
     type: String, 
     required: true
   }, 
+  // Add tags model?
   tag: {
     type: String, 
   }

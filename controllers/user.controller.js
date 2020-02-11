@@ -1,16 +1,13 @@
 const User = require("../models/user.model");
 const createError = require("http-errors");
 
-
-// LIST USERS 
-
+// LIST USERS
 
 module.exports.getUsers = (req, res, next) => {
 	User.find()
 		.then(users => res.json(users))
 		.catch(next);
 };
-
 
 //CREATE USER
 
@@ -35,7 +32,6 @@ module.exports.create = (req, res, next) => {
 
 //USER LOGIN
 
-
 module.exports.doLogin = (req, res, next) => {
 	const { email, password } = req.body;
 	if (!email || !password) {
@@ -43,6 +39,7 @@ module.exports.doLogin = (req, res, next) => {
 	}
 
 	User.findOne({ email: email })
+		.populate("folders")
 		.then(user => {
 			if (!user) {
 				throw createError(404, "user not found");
@@ -62,7 +59,6 @@ module.exports.doLogin = (req, res, next) => {
 
 //USER LOGOUT
 
-
 module.exports.logout = (req, res, next) => {
 	req.session.destroy();
 	res.clearCookie("connect.sid");
@@ -73,8 +69,6 @@ module.exports.logout = (req, res, next) => {
 
 // USER DETAILS
 
-
-
 module.exports.showDetails = (req, res, next) => {
 	User.findById(req.params.id)
 		.then(user => res.json(user))
@@ -82,7 +76,6 @@ module.exports.showDetails = (req, res, next) => {
 };
 
 // EDIT USER
-
 
 module.exports.editUser = (req, res, next) => {
 	const {
@@ -94,6 +87,8 @@ module.exports.editUser = (req, res, next) => {
 		collaborators,
 		interests,
 		filters,
+		folders,
+		saved_news,
 	} = req.body;
 	userModel = {
 		name,
@@ -104,6 +99,8 @@ module.exports.editUser = (req, res, next) => {
 		collaborators,
 		interests,
 		filters,
+		folders,
+		saved_news,
 	};
 	console.log(userModel);
 
@@ -116,7 +113,6 @@ module.exports.editUser = (req, res, next) => {
 };
 
 // DELETE USER
-
 
 module.exports.deleteUser = (req, res, next) => {
 	User.deleteOne(req.params._id)
