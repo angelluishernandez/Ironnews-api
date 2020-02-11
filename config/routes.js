@@ -25,7 +25,10 @@ router.delete("/user/:id", authMiddleware.isAuthenticated, userController.delete
 
 
 router.get("/news/:id", authMiddleware.isAuthenticated, newsController.listNews)
-router.post("/folders/:id/newfolder", upload.single("profilePic"), foldersController.addFolder)
+router.post("/folders/:id/newfolder", upload.single("profilePic"), authMiddleware.isAuthenticated, foldersController.addFolder)
+router.get("/folders/:id/:folderId", authMiddleware.isAuthenticated, foldersController.folderDetail)
+router.patch("/folders/:id/:folderId", authMiddleware.isAuthenticated, foldersController.updateFolder)
+router.delete("/folders/:id/:folderId/deletefolder", authMiddleware.isAuthenticated, foldersController.deleteFolder)
 
 
 

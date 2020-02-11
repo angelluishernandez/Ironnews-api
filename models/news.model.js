@@ -32,7 +32,7 @@ const newsSchema = new mongoose.Schema({
     type: Boolean, 
     default: false 
   }, 
-  tag: {
+  tags: {
     type: String
   }, 
   readed: {

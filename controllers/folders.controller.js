@@ -26,15 +26,39 @@ module.exports.addFolder = (req, res, next) => {
 			User.findByIdAndUpdate(
 				{ _id: req.params.id },
 				{ $set: { folders: folder.id } },
-				{ upsert: true },  function (error, updatedDocument) {
+				{ upsert: true },
+				function(error, updatedDocument) {
 					folder
-					.save()
-					.then(folder => res.json(folder))
-					.catch(error => console.log(error))
-
-				} 
-			)
-			
+						.save()
+						.then(folder => res.json(folder))
+						.catch(error => console.log(error));
+				}
+			);
 		})
+		.catch(error => console.log(error));
+};
+
+module.exports.folderDetail = (req, res, next) => {
+	const folder = req.params.folderId;
+
+	Folder.findById(folder)
+		.populate("worker")
+		.then(response => res.json(response))
+		.catch(error => console.log(error));
+};
+
+module.exports.updateFolder = (req, res, next) => {
+	const folderId = req.params.folderId;
+
+	console.log(req.body);
+	Folder.findOneAndUpdate(folderId, req.body, { new: true })
+
+		.then(folder => res.json(folder))
+		.catch(error => console.log(error));
+};
+
+module.exports.deleteFolder = (req, res, next) => {
+	Folder.deleteOne(req.params.folderId)
+		.then(res => res.status(200).send("The folder was deleted succesfully"))
 		.catch(error => console.log(error));
 };

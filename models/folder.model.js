@@ -17,7 +17,7 @@ const folderSchema = new mongoose.Schema({
     required: true
   }, 
   // Add tags model?
-  tag: {
+  tags: {
     type: String, 
   }
 
