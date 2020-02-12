@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 require("./user.model");
-const newsSchema = mongoose.Schema({
-	user_id: {
+const newsSchema = new mongoose.Schema({
+	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",
 		required: true,
 	},
-	folder_id: {
+	folder: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Folders",
   },
@@ -32,7 +32,7 @@ const newsSchema = mongoose.Schema({
     type: Boolean, 
     default: false 
   }, 
-  tag: {
+  tags: {
     type: String
   }, 
   readed: {
