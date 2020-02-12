@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 require("./news.model");
 require("./folder.model");
 
-// const EMAIL_PATTERN = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+const EMAIL_PATTERN = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 const SALT_WORK_FACTOR = 10;
 const userSchema = new mongoose.Schema(
 	{
@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
 			required: [true, "Email is required"],
 			trim: true,
 			lowercase: true,
-			// match: [EMAIL_PATTERN, "Email is required"],
+			match: [EMAIL_PATTERN, "Email is required"],
 			unique: true
 		},
 		password: {
