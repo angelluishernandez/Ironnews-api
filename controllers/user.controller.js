@@ -70,52 +70,60 @@ module.exports.logout = (req, res, next) => {
 // USER DETAILS
 
 module.exports.showDetails = (req, res, next) => {
-	User.findById(req.params.id)
-		.then(user => res.json(user))
-		.catch(error => console.log(error));
+	
+		User.findById(req.params.id)
+			.then(user => res.json(user))
+			.catch(error => console.log(error));
+	
 };
 
 // EDIT USER
 
 module.exports.editUser = (req, res, next) => {
-	const {
-		name,
-		email,
-		password,
-		profilePic,
-		organization,
-		collaborators,
-		interests,
-		filters,
-		folders,
-		saved_news,
-	} = req.body;
-	userModel = {
-		name,
-		email,
-		password,
-		profilePic: req.file ? req.file.url : null,
-		organization,
-		collaborators,
-		interests,
-		filters,
-		folders,
-		saved_news,
-	};
-	console.log(userModel);
 
-	User.findByIdAndUpdate(req.params.id, userModel, { new: true })
-		.then(user => {
-			console.log(user);
-			res.json(user);
-		})
-		.catch(error => next(error));
+		const {
+			name,
+			email,
+			password,
+			profilePic,
+			organization,
+			collaborators,
+			interests,
+			filters,
+			folders,
+			saved_news,
+		} = req.body;
+		userModel = {
+			name,
+			email,
+			password,
+			profilePic: req.file ? req.file.url : null,
+			organization,
+			collaborators,
+			interests,
+			filters,
+			folders,
+			saved_news,
+		};
+		console.log(userModel);
+		User.findByIdAndUpdate(req.params.id, userModel, { new: true })
+			.then(user => {
+				console.log(user);
+				res.json(user);
+			})
+			.catch(error => next(error));
+
 };
 
 // DELETE USER
 
 module.exports.deleteUser = (req, res, next) => {
-	User.deleteOne(req.params._id)
-		.then(user => console.log(`User named ${user.name} has been deleted`))
-		.catch(error => console.log(error));
+	const currentUserId = req.session.user.id;
+	if (currentUserId === req.params.id) {
+		User.deleteOne(req.params._id)
+			.then(user => console.log(`User named ${user.name} has been deleted`))
+			.catch(error => console.log(error));
+	} else {
+		throw createError(400, "You are not allowed here");
+	}
 };

@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema(
 			type: String,
 		},
 		interests: {
-			type: String,
+			type: [String],
 			enum: InterestsList,
 		},
 		filters: [String],

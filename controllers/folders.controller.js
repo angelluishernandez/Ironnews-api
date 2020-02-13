@@ -13,38 +13,50 @@ module.exports.listFolders = (req, res, next) => {
 };
 
 module.exports.addFolder = (req, res, next) => {
-	const folder = new Folder({
-		user: req.params.id,
-		description: req.body.description,
-		tags: req.body.tags,
-	});
-	console.log(req.body);
-	folder
-		.save()
-		.then(folder => {
-			console.log(folder);
-			User.findByIdAndUpdate(
-				{ _id: req.params.id },
-				{ $set: { folders: folder.id } },
-				{ upsert: true },
-				function(error, updatedDocument) {
-					folder
-						.save()
-						.then(folder => res.json(folder))
-						.catch(error => console.log(error));
-				}
-			);
-		})
-		.catch(error => console.log(error));
+	const currentUser = req.session.user.id;
+	if (currentUser === req.params.id) {
+		const folder = new Folder({
+			user: req.params.id,
+			description: req.body.description,
+			tags: req.body.tags,
+		});
+		console.log(req.body);
+		folder
+			.save()
+			.then(folder => {
+				console.log(folder);
+				User.findByIdAndUpdate(
+					{ _id: req.params.id },
+					{ $set: { folders: folder.id } },
+					{ upsert: true },
+					function(error, updatedDocument) {
+						folder
+							.save()
+							.then(folder => res.json(folder))
+							.catch(error => console.log(error));
+					}
+				);
+			})
+			.catch(error => console.log(error));
+	} else {
+		throw createError(400, "You are not allowed here! :( ");
+	}
 };
 
 module.exports.folderDetail = (req, res, next) => {
+	const currentUser = req.session.user.id;
+	if (currentUser === req.params.id) {
+	
 	const folder = req.params.folderId;
 
 	Folder.findById(folder)
-		.populate("worker")
+		.populate("user")
 		.then(response => res.json(response))
-		.catch(error => console.log(error));
+		.catch(error => console.log(error))
+	}else {
+		
+	}
+
 };
 
 module.exports.updateFolder = (req, res, next) => {

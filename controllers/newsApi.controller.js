@@ -18,12 +18,7 @@ module.exports.getTopHeadlines = (req, res, next) => {
 		})
 		.then(articles => {
 			res.status(200).json(articles);
-			/*
-    {
-      status: "ok",
-      articles: [...]
-    }
-  */
+	
 		})
 		.catch(error => console.log(error));
 };
@@ -45,12 +40,7 @@ newsapi.v2
 		})
 		.then(articles => {
 			res.status(200).json(articles);
-			/*
-    {
-      status: "ok",
-      articles: [...]
-    }
-  */
+	
 		})
 		.catch(error => console.log(error));
 

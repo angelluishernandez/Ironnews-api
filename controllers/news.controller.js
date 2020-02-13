@@ -4,7 +4,6 @@ const Folders = require("../models/folder.model");
 const createError = require("http-errors");
 
 module.exports.listNews = (req, res, next) => {
-	console.log(req.params.id);
 	Users.findById(req.params.id)
 		.populate("folders")
 		.populate("news")
@@ -33,7 +32,7 @@ module.exports.addNews = (req, res, next) => {
 				{ $set: { saved_news: news } },
 				{ upsert: true },
 				function(error, updatedUser) {
-					console.log(updatedUser)
+					console.log(updatedUser);
 					news
 						.save()
 						.then(news => res.status(200).json(news))
@@ -42,6 +41,47 @@ module.exports.addNews = (req, res, next) => {
 			);
 		})
 		.catch(error => console.log(error));
+};
+
+module.exports.newsDetails = (req, res, next) => {
+	const news = req.params.newsId;
+
+	News.findById(news)
+		.populate("folder")
+		.populate("user")
+		.then(news => res.json(news))
+		.catch(error => console.log(error));
+};
+
+module.exports.editNews = (req, res, next) => {
+	const {
+		source_name,
+		headline,
+		url,
+		image,
+		date,
+		isInFolder,
+		tags,
+		readed,
+		notes,
+	} = req.body;
+	newsModel = {
+		source_name,
+		headline,
+		url,
+		image,
+		date,
+		isInFolder,
+		tags,
+		readed,
+		notes,
+	};
+	News.findOneAndUpdate(req.params.id, newsModel, { new: true })
+		.then(news => {
+			console.log(news);
+			res.status(200).json(news);
+		})
+		.catch(error => next(error));
 };
 
 module.exports.addNewsToFolder = (req, res, next) => {};
