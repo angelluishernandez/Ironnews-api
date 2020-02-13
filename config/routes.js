@@ -20,6 +20,7 @@ router.post("/logout", authMiddleware.isAuthenticated, userController.logout)
 router.post("/register", upload.single("profilePic"), authMiddleware.isNotAuthenticated, userController.create)
 router.get("/news/top-headlines", authMiddleware.isAuthenticated, newsAPIController.getTopHeadlines)
 router.get("/news/everything", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsAPIController.everything)
+router.get("/news/:id/my-headlines", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsAPIController.getCustomCategoriesNews)
 router.get("/folders/:id", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, foldersController.listFolders)
 
 router.get("/user/:id", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, userController.showDetails)
