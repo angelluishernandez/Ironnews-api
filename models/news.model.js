@@ -40,7 +40,8 @@ const newsSchema = new mongoose.Schema({
     required: true
   }, 
   notes: {
-    type: String, 
+    type: String,
+    default: ""
 
   }
 });

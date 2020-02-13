@@ -118,12 +118,8 @@ module.exports.editUser = (req, res, next) => {
 // DELETE USER
 
 module.exports.deleteUser = (req, res, next) => {
-	const currentUserId = req.session.user.id;
-	if (currentUserId === req.params.id) {
 		User.deleteOne(req.params._id)
 			.then(user => console.log(`User named ${user.name} has been deleted`))
 			.catch(error => console.log(error));
-	} else {
-		throw createError(400, "You are not allowed here");
-	}
+	
 };

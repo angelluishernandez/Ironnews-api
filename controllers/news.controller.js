@@ -84,4 +84,22 @@ module.exports.editNews = (req, res, next) => {
 		.catch(error => next(error));
 };
 
-module.exports.addNewsToFolder = (req, res, next) => {};
+module.exports.addNewsToFolder = (req, res, next) => {
+	const folder = req.body.name;
+	News.findById(req.params.newsId)
+		.then(news => {
+			Users.findOneAndUpdate({ folders: folder }, { $push: { news: news } })
+				.then(folder => res.status(200).json(folder))
+				.catch(error => console.log(error));
+		})
+		.catch(error => console.log(error));
+};
+
+module.exports.deleteNews = (req, res, next) => {
+	News.deleteOne(req.params.newsId)
+		.then(res => res.status(202))
+		.catch(error => {
+			console.log(error);
+			res.json("This news has been deleted");
+		});
+};

@@ -6,6 +6,7 @@ require("./folder.model");
 
 const EMAIL_PATTERN = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 const SALT_WORK_FACTOR = 10;
+const max_categories = 10;
 const userSchema = new mongoose.Schema(
 	{
 		name: {
@@ -18,7 +19,7 @@ const userSchema = new mongoose.Schema(
 			trim: true,
 			lowercase: true,
 			match: [EMAIL_PATTERN, "Email is required"],
-			unique: true
+			unique: true,
 		},
 		password: {
 			type: String,
@@ -30,7 +31,6 @@ const userSchema = new mongoose.Schema(
 		},
 
 		// Another model for organizations should be included later on
-
 		organization: {
 			type: String,
 			required: true,
@@ -40,11 +40,19 @@ const userSchema = new mongoose.Schema(
 		collaborators: {
 			type: String,
 		},
-		interests: {
+		categories: {
 			type: [String],
 			enum: InterestsList,
 		},
-		filters: [String],
+		customCategories: [
+			{
+				type: String,
+				validate: {
+					validator: () => this.customCategories.length <= 50,
+				},
+				message: "You have too many categories. Please delete some",
+			},
+		],
 		folders: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Folders",
@@ -52,7 +60,7 @@ const userSchema = new mongoose.Schema(
 		saved_news: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "News",
-		}
+		},
 	},
 	{ timestamps: true }
 );
