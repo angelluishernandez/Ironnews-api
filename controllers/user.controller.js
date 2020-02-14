@@ -70,7 +70,7 @@ module.exports.logout = (req, res, next) => {
 // USER DETAILS
 
 module.exports.showDetails = (req, res, next) => {
-	
+	console.log("details")
 		User.findById(req.params.id)
 			.then(user => res.json(user))
 			.catch(error => console.log(error));
@@ -90,8 +90,7 @@ module.exports.editUser = (req, res, next) => {
 			collaborators,
 			interests,
 			filters,
-			folders,
-			saved_news,
+			
 		} = req.body;
 		userModel = {
 			name,
@@ -102,8 +101,7 @@ module.exports.editUser = (req, res, next) => {
 			collaborators,
 			interests,
 			filters,
-			folders,
-			saved_news,
+			
 		};
 		console.log(userModel);
 		User.findByIdAndUpdate(req.params.id, userModel, { new: true })

@@ -4,16 +4,32 @@ const Folders = require("../models/folder.model");
 const createError = require("http-errors");
 
 module.exports.listNews = (req, res, next) => {
-	Users.findById(req.params.id)
-		.populate("folders")
-		.populate("news")
-		.then(user => res.json(user.folders))
-		.catch(error => console.info(error));
+	// Users.findById(req.params.id)
+	// 	.populate("saved_news")
+	// 	.then(user => {
+	// 		console.log(user.saved);
+	// 		res.json(user);
+	// 	})
+	// 	.catch(error => console.info(error));
+
+	News.find({user: req.params.id})
+		.then(response => res.json(response))
+		.catch(error => console.log(error));
 };
+
+// module.exports.listNews = (req, res, next) => {
+// 	News.find({user: req.params.id})
+// 		.populate("worker")
+// 		.then(user => {
+// 			console.log(user.saved_news);
+// 			res.json(user.saved_news);
+// 		})
+// 		.catch(error => console.info(error));
+// };
 
 module.exports.addNews = (req, res, next) => {
 	const news = new News({
-		source_name: req.body.name,
+		source_name: req.body.source_name,
 		headline: req.body.headline,
 		url: req.body.url,
 		image: req.body.image,
@@ -22,14 +38,16 @@ module.exports.addNews = (req, res, next) => {
 		tags: req.body.tags,
 		readed: "readed" ? true : false,
 		notes: req.body.notes,
+		user: req.params.id,
 	});
+	console.log(news);
 	news
 		.save()
 		.then(news => {
 			console.log(news);
-			Folders.findByIdAndUpdate(
+			Users.findByIdAndUpdate(
 				req.params.id,
-				{ $set: { saved_news: news } },
+				{ $push: { saved_news: news } },
 				{ upsert: true },
 				function(error, updatedUser) {
 					console.log(updatedUser);
@@ -71,12 +89,12 @@ module.exports.editNews = (req, res, next) => {
 		url,
 		image,
 		date,
-		isInFolder,
+		isInFolder: "checked" ? true : false,
 		tags,
-		readed,
+		readed: "readed" ? true : false,
 		notes,
 	};
-	News.findOneAndUpdate(req.params.id, newsModel, { new: true })
+	News.findOneAndUpdate(req.params.newsId, newsModel, { new: true })
 		.then(news => {
 			console.log(news);
 			res.status(200).json(news);

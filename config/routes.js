@@ -28,7 +28,9 @@ router.delete("/user/:id", authMiddleware.isAuthenticated, authMiddleware.isCurr
 
 
 router.get("/news/:id", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsController.listNews)
-router.get("/news/:id/my-headlines", authMiddleware.isAuthenticated, newsAPIController.getCustomCategoriesNews)
+router.get("/news/:id/my-headlines", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsAPIController.getCustomCategoriesNews)
+router.post("/news/:id/add-news", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsController.addNews)
+
 
 router.get("/news/:id/:newsId", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsController.newsDetails)
 router.patch("/news/:id/:newsId", authMiddleware.isAuthenticated,  authMiddleware.isCurrentUser, newsController.editNews)
