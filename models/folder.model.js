@@ -3,6 +3,11 @@ require("./user.model");
 require("./news.model")
 const folderSchema = new mongoose.Schema({
 
+  name: {
+    type: String, 
+    required: true, 
+    unique: true
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: "User"
@@ -12,11 +17,7 @@ const folderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: "News" 
   },
-  name: {
-    type: String, 
-    required: true, 
-    unique: true
-  },
+  
   description: {
     type: String, 
     required: true

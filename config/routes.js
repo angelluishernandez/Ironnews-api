@@ -20,7 +20,6 @@ router.post("/logout", authMiddleware.isAuthenticated, userController.logout)
 router.post("/register", upload.single("profilePic"), authMiddleware.isNotAuthenticated, userController.create)
 router.get("/news/top-headlines", authMiddleware.isAuthenticated, newsAPIController.getTopHeadlines)
 router.get("/news/everything", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsAPIController.everything)
-router.get("/news/:id/my-headlines", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsAPIController.getCustomCategoriesNews)
 router.get("/folders/:id", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, foldersController.listFolders)
 
 router.get("/user/:id", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, userController.showDetails)
@@ -29,6 +28,8 @@ router.delete("/user/:id", authMiddleware.isAuthenticated, authMiddleware.isCurr
 
 
 router.get("/news/:id", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsController.listNews)
+router.get("/news/:id/my-headlines", authMiddleware.isAuthenticated, newsAPIController.getCustomCategoriesNews)
+
 router.get("/news/:id/:newsId", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsController.newsDetails)
 router.patch("/news/:id/:newsId", authMiddleware.isAuthenticated,  authMiddleware.isCurrentUser, newsController.editNews)
 router.delete("/news/:id/:newsId", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsController.deleteNews)

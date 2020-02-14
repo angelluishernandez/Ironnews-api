@@ -41,8 +41,8 @@ module.exports.everything = (req, res, next) => {
 };
 
 module.exports.getCustomCategoriesNews = (req, res, next) => {
-	const user = req.params.id;
-	User.findById(user).then(user =>
+   const user = req.params.id;
+	User.findById(user).then(user => 
 		user.customCategories.forEach(category => {
 			newsapi.v2
 				.topHeadlines({
