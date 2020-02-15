@@ -34,6 +34,10 @@ app.use(session);
  */
 const router = require('./config/routes.js');
 app.use('/', router);
+app.use("/", require("./routes/users.routes"))
+app.use("/", require("./routes/news.routes"))
+app.use("/", require("./routes/folders.routes"))
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
