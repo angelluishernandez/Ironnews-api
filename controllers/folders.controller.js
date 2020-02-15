@@ -13,57 +13,50 @@ module.exports.listFolders = (req, res, next) => {
 };
 
 module.exports.addFolder = (req, res, next) => {
-	const currentUser = req.session.user.id;
-	if (currentUser === req.params.id) {
-		const folder = new Folder({
-			user: req.params.id,
-			description: req.body.description,
-			tags: req.body.tags,
-		});
-		console.log(req.body);
-		folder
-			.save()
-			.then(folder => {
-				console.log(folder);
-				User.findByIdAndUpdate(
-					{ _id: req.params.id },
-					{ $set: { folders: folder.id } },
-					{ upsert: true },
-					function(error, updatedDocument) {
-						folder
-							.save()
-							.then(folder => res.json(folder))
-							.catch(error => console.log(error));
-					}
-				);
-			})
-			.catch(error => console.log(error));
-	} else {
-		throw createError(400, "You are not allowed here! :( ");
-	}
+	const folder = new Folder({
+		name: req.body.name,
+		description: req.body.description,
+		tags: req.body.tags,
+		user: req.params.id,
+		news: req.body.news,
+	});
+
+	console.log(folder);
+
+	folder
+		.save()
+		.then(folder => {
+			console.log(folder);
+			User.findByIdAndUpdate(
+				req.params.id,
+				{ $push: { folders: folder } },
+				{ upsert: true },
+				function(error, updatedDocument) {
+					folder
+						.save()
+						.then(folder => res.json(folder))
+						.catch(error => console.log(error));
+				}
+			);
+		})
+		.catch(error => console.log(error));
 };
 
-module.exports.folderDetail = (req, res, next) => {
-	const currentUser = req.session.user.id;
-	if (currentUser === req.params.id) {
-	
-	const folder = req.params.folderId;
+module.exports.folderDetails = (req, res, next) => {
 
-	Folder.findById(folder)
-		.populate("user")
-		.then(response => res.json(response))
-		.catch(error => console.log(error))
-	}else {
-		
-	}
 
+		Folder.findById(req.params.folderId)
+			.populate("user")
+			.populate("news")
+			.then(response => res.json(response))
+			.catch(error => console.log(error));
 };
 
 module.exports.updateFolder = (req, res, next) => {
 	const folderId = req.params.folderId;
 
 	console.log(req.body);
-	Folder.findOneAndUpdate(folderId, req.body, { new: true })
+	Folder.findOneAndUpdate(folderId, req.body, { new: false })
 
 		.then(folder => res.json(folder))
 		.catch(error => console.log(error));

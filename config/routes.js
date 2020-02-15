@@ -31,6 +31,9 @@ router.get("/news/:id", authMiddleware.isAuthenticated, authMiddleware.isCurrent
 router.get("/news/:id/my-headlines", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsAPIController.getCustomCategoriesNews)
 router.post("/news/:id/add-news", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsController.addNews)
 
+router.get("/folders/:id/:folderId", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, foldersController.folderDetails)
+router.post("/folders/:id/newfolder", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, foldersController.addFolder)
+
 
 router.get("/news/:id/:newsId", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsController.newsDetails)
 router.patch("/news/:id/:newsId", authMiddleware.isAuthenticated,  authMiddleware.isCurrentUser, newsController.editNews)
@@ -38,8 +41,6 @@ router.delete("/news/:id/:newsId", authMiddleware.isAuthenticated, authMiddlewar
 router.post("/news/:id/:newsId/add-to-folder", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsController.addNewsToFolder)
 
 
-router.post("/folders/:id/newfolder", upload.single("profilePic"), authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, foldersController.addFolder)
-router.get("/folders/:id/:folderId", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, foldersController.folderDetail)
 router.patch("/folders/:id/:folderId", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, foldersController.updateFolder)
 router.delete("/folders/:id/:folderId/deletefolder", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, foldersController.deleteFolder)
 

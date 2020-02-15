@@ -4,28 +4,11 @@ const Folders = require("../models/folder.model");
 const createError = require("http-errors");
 
 module.exports.listNews = (req, res, next) => {
-	// Users.findById(req.params.id)
-	// 	.populate("saved_news")
-	// 	.then(user => {
-	// 		console.log(user.saved);
-	// 		res.json(user);
-	// 	})
-	// 	.catch(error => console.info(error));
-
-	News.find({user: req.params.id})
+	News.find({ user: req.params.id })
+		.populate("user")
 		.then(response => res.json(response))
 		.catch(error => console.log(error));
 };
-
-// module.exports.listNews = (req, res, next) => {
-// 	News.find({user: req.params.id})
-// 		.populate("worker")
-// 		.then(user => {
-// 			console.log(user.saved_news);
-// 			res.json(user.saved_news);
-// 		})
-// 		.catch(error => console.info(error));
-// };
 
 module.exports.addNews = (req, res, next) => {
 	const news = new News({
@@ -104,20 +87,25 @@ module.exports.editNews = (req, res, next) => {
 
 module.exports.addNewsToFolder = (req, res, next) => {
 	const folder = req.body.name;
-	News.findById(req.params.newsId)
-		.then(news => {
-			Users.findOneAndUpdate({ folders: folder }, { $push: { news: news } })
-				.then(folder => res.status(200).json(folder))
-				.catch(error => console.log(error));
+	console.log(folder);
+	Folders.findOneAndUpdate(
+		{ name: folder },
+		{ news: req.params.newsId },
+		{ upsert: true }
+	)
+		.then(folder => {
+			console.log("this is the folder=> ", folder)
+			folder.populate("news");
+			res.json(folder);
 		})
 		.catch(error => console.log(error));
 };
 
 module.exports.deleteNews = (req, res, next) => {
-	News.deleteOne(req.params.newsId)
-		.then(res => res.status(202))
+	News.findByIdAndRemove(req.params.newsId)
+		.then(console.log("This news has been deleted"))
 		.catch(error => {
 			console.log(error);
-			res.json("This news has been deleted");
+			throw createError("This news hasn't been deleted");
 		});
 };

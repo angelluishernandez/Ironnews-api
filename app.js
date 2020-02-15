@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const session = require('./config/session.config');
 const cors = require('./config/cors.config')
+const bodyParser = require("body-parser")
 
 
 /**
