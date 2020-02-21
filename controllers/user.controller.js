@@ -19,15 +19,17 @@ module.exports.create = (req, res, next) => {
 		profilePic: req.file ? req.file.url : undefined,
 		organization: req.body.organization,
 		collaborators: req.body.collaborators,
-		interests: req.body.interests,
-		filters: req.body.filters,
-		folders: req.body.folders,
-		saved_news: req.body.saved_news,
+		categories: req.body.categories,
+		customCategories: req.body.customCategories,
 	});
+	console.log("=====================================")
 	user
 		.save()
-		.then(user => res.status(202).json(user))
-		.catch(next);
+		.then(user => {
+			console.log(user);
+			res.status(201).json(user);
+		})
+		.catch(error=> console.log("this is the error=>", error));
 };
 
 //USER LOGIN
@@ -37,6 +39,8 @@ module.exports.doLogin = (req, res, next) => {
 	if (!email || !password) {
 		throw createError(400, "missing credentials");
 	}
+	console.log(req.body)
+
 
 	User.findOne({ email: email })
 		.populate("folders")
@@ -61,63 +65,54 @@ module.exports.doLogin = (req, res, next) => {
 
 module.exports.logout = (req, res, next) => {
 	req.session.destroy();
-	res.clearCookie("connect.sid");
-	if (!req.session) {
-		console.log("Logged out");
-	}
+	res.status(204).json();
 };
 
 // USER DETAILS
 
 module.exports.showDetails = (req, res, next) => {
-	console.log("details")
-		User.findById(req.params.id)
-			.then(user => res.json(user))
-			.catch(error => console.log(error));
-	
+	console.log("details");
+	User.findById(req.params.id)
+		.then(user => res.json(user))
+		.catch(error => console.log(error));
 };
 
 // EDIT USER
 
 module.exports.editUser = (req, res, next) => {
-
-		const {
-			name,
-			email,
-			password,
-			profilePic,
-			organization,
-			collaborators,
-			interests,
-			filters,
-			
-		} = req.body;
-		userModel = {
-			name,
-			email,
-			password,
-			profilePic: req.file ? req.file.url : null,
-			organization,
-			collaborators,
-			interests,
-			filters,
-			
-		};
-		console.log(userModel);
-		User.findByIdAndUpdate(req.params.id, userModel, { new: true })
-			.then(user => {
-				console.log(user);
-				res.json(user);
-			})
-			.catch(error => next(error));
-
+	const {
+		name,
+		email,
+		password,
+		profilePic,
+		organization,
+		collaborators,
+		interests,
+		filters,
+	} = req.body;
+	userModel = {
+		name,
+		email,
+		password,
+		profilePic: req.file ? req.file.url : null,
+		organization,
+		collaborators,
+		interests,
+		filters,
+	};
+	console.log(userModel);
+	User.findByIdAndUpdate(req.params.id, userModel, { new: true })
+		.then(user => {
+			console.log(user);
+			res.json(user);
+		})
+		.catch(error => next(error));
 };
 
 // DELETE USER
 
 module.exports.deleteUser = (req, res, next) => {
-		User.deleteOne(req.params._id)
-			.then(user => console.log(`User named ${user.name} has been deleted`))
-			.catch(error => console.log(error));
-	
+	User.deleteOne(req.params._id)
+		.then(user => console.log(`User named ${user.name} has been deleted`))
+		.catch(error => console.log(error));
 };

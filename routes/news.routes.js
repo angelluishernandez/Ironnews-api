@@ -8,7 +8,7 @@ const upload = require("../config/cloudinary.config")
 const fetch = require("node-fetch")
 
 
-router.get("/news/top-headlines", authMiddleware.isAuthenticated, newsAPIController.getTopHeadlines)
+router.post("/news/top-headlines", authMiddleware.isAuthenticated, newsAPIController.getTopHeadlines)
 router.get("/news/everything", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsAPIController.everything)
 router.get("/news/:id", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsController.listNews)
 router.get("/news/:id/my-headlines", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, newsAPIController.getCustomCategoriesNews)

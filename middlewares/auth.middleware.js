@@ -17,7 +17,6 @@ module.exports.isNotAuthenticated = (req, res, next) => {
 
 
 module.exports.isCurrentUser = (req, res, next) => {
-	console.log(req.session.user._id)
 	if(req.session.user._id === req.params.id){
 		next()
 

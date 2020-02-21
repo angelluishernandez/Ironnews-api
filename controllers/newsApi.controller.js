@@ -5,7 +5,7 @@ const createError = require("http-errors");
 
 module.exports.getTopHeadlines = (req, res, next) => {
 	const { query, qInTitle, lenguage, source, from, to, sortBy } = req.body;
-	console.log(req.body);
+	console.log("Esto es el body=> ", req.body)
 	newsapi.v2
 		.topHeadlines({
 			q: query,
@@ -19,7 +19,7 @@ module.exports.getTopHeadlines = (req, res, next) => {
 		.then(articles => {
 			res.status(200).json(articles);
 		})
-		.catch(error => console.log(error));
+		.catch(error => console.log(createError(error)));
 };
 
 module.exports.everything = (req, res, next) => {

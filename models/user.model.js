@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
 		// Another model for organizations should be included later on
 		organization: {
 			type: String,
-			required: true,
+			// required: true,
 		},
 		// Another model for organizations should be included later on
 
@@ -44,15 +44,7 @@ const userSchema = new mongoose.Schema(
 			type: [String],
 			enum: InterestsList,
 		},
-		customCategories: [
-			{
-				type: String,
-				validate: {
-					validator: () => this.customCategories.length <= 50,
-				},
-				message: "You have too many categories. Please delete some",
-			},
-		],
+		customCategories: [String],
 		folders: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Folders",
