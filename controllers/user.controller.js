@@ -3,7 +3,7 @@ const createError = require("http-errors");
 
 // LIST USERS
 
-module.exports.getUsers = (req, res, next) => {
+module.exports.getUser = (req, res, next) => {
 	User.find()
 		.then(users => res.json(users))
 		.catch(next);
