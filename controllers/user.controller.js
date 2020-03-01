@@ -1,12 +1,18 @@
 const User = require("../models/user.model");
 const createError = require("http-errors");
+const NewsAPI = require("newsapi");
+const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
 
 // LIST USERS
 
-module.exports.getUser = (req, res, next) => {
-	User.find()
-		.then(users => res.json(users))
-		.catch(next);
+module.exports.landing = (req, res, next) => {
+	console.log("current user custom => ", req.session.user.customCategories)
+	newsapi.v2
+		.topHeadlines({
+			category: req.session.user.customCategories,
+		})
+		.then(articles => res.status(200).json(articles))
+		.catch(error => console.log(createError(error)));
 };
 
 //CREATE USER
@@ -22,25 +28,25 @@ module.exports.create = (req, res, next) => {
 		categories: req.body.categories,
 		customCategories: req.body.customCategories,
 	});
-	console.log("=====================================")
+	console.log("=====================================");
 	user
 		.save()
 		.then(user => {
 			console.log(user);
 			res.status(201).json(user);
 		})
-		.catch(error=> console.log("this is the error=>", error));
+		.catch(error => console.log("this is the error=>", error));
 };
 
 //USER LOGIN
 
 module.exports.doLogin = (req, res, next) => {
+	console.log(req.session.user);
 	const { email, password } = req.body;
 	if (!email || !password) {
 		throw createError(400, "missing credentials");
 	}
-	console.log(req.body)
-
+	console.log(req.body);
 
 	User.findOne({ email: email })
 		.populate("folders")
@@ -103,7 +109,6 @@ module.exports.editUser = (req, res, next) => {
 	console.log(userModel);
 	User.findByIdAndUpdate(req.params.id, userModel, { new: true })
 		.then(user => {
-			console.log(user);
 			res.json(user);
 		})
 		.catch(error => next(error));

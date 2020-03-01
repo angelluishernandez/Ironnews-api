@@ -15,18 +15,11 @@ module.exports.isNotAuthenticated = (req, res, next) => {
 	}
 };
 
-
 module.exports.isCurrentUser = (req, res, next) => {
-	if(req.session.user._id === req.params.id){
-		next()
-
-
-
-
-	}else{
-		req.session.genericError = "You are not allowed here"
+	console.log(req.params.id)
+	if (req.session.user._id === req.params.id) {
+		next();
+	} else {
+		req.session.genericError = "You are not allowed in here";
 	}
-
-
-
-}
+};

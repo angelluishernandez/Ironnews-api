@@ -5,7 +5,7 @@ const authMiddleware = require("../middlewares/auth.middleware")
 const upload = require("../config/cloudinary.config")
 const fetch = require("node-fetch")
 
-router.get("/", authMiddleware.isAuthenticated, userController.getUser)
+// router.get("/", authMiddleware.isAuthenticated, authMiddleware.isCurrentUser, userController.landing)
 router.post("/login", authMiddleware.isNotAuthenticated, userController.doLogin)
 router.post("/logout", authMiddleware.isAuthenticated, userController.logout)
 router.post("/register", upload.single("profilePic"), authMiddleware.isNotAuthenticated, userController.create)
