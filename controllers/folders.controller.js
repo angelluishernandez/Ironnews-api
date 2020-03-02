@@ -5,10 +5,11 @@ const createError = require("http-errors");
 
 module.exports.listFolders = (req, res, next) => {
 	const user = req.params.id;
-
-	User.findById(user)
-		.populate("folders")
-		.then(user => res.json(user.folders))
+	Folder.find({ user: req.params.id })
+		.then(folders => {
+			console.log(folders);
+			res.status(200).json(folders);
+		})
 		.catch(error => console.log(error));
 };
 
@@ -21,21 +22,17 @@ module.exports.addFolder = (req, res, next) => {
 		news: req.body.news,
 	});
 
-	console.log(folder);
 
 	folder
 		.save()
 		.then(folder => {
-			console.log(folder);
 			User.findByIdAndUpdate(
 				req.params.id,
-				{ $push: { folders: folder } },
-				{ upsert: true },
+				{ $set: { folders: folder.id } },
+
 				function(error, updatedDocument) {
-					folder
-						.save()
-						.then(folder => res.json(folder))
-						.catch(error => console.log(error));
+					res.json(folder);
+					folder.save();
 				}
 			);
 		})
@@ -43,13 +40,11 @@ module.exports.addFolder = (req, res, next) => {
 };
 
 module.exports.folderDetails = (req, res, next) => {
-
-
-		Folder.findById(req.params.folderId)
-			.populate("user")
-			.populate("news")
-			.then(response => res.json(response))
-			.catch(error => console.log(error));
+	Folder.findById(req.params.folderId)
+		.populate("user")
+		.populate("news")
+		.then(response => res.json(response))
+		.catch(error => console.log(error));
 };
 
 module.exports.updateFolder = (req, res, next) => {
@@ -63,7 +58,11 @@ module.exports.updateFolder = (req, res, next) => {
 };
 
 module.exports.deleteFolder = (req, res, next) => {
-	Folder.deleteOne(req.params.folderId)
-		.then(res => res.status(200).send("The folder was deleted succesfully"))
+	console.log("this is req.params=>", req.params)
+	Folder.deleteOne({_id: req.params.folderId})
+		.then(response => {
+			console.log(response);
+			response.send("The folder was deleted succesfully");
+		})
 		.catch(error => console.log(error));
 };
