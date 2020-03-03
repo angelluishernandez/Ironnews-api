@@ -4,7 +4,7 @@ const Folders = require("../models/folder.model");
 const createError = require("http-errors");
 
 module.exports.listNews = (req, res, next) => {
-	News.find({ user: req.params.id })
+	News.find({ folder: req.params.fodlerId })
 		.populate("user")
 		.then(response => res.json(response))
 		.catch(error => console.log(error));
@@ -85,20 +85,50 @@ module.exports.editNews = (req, res, next) => {
 		.catch(error => next(error));
 };
 
-module.exports.addNewsToFolder = (req, res, next) => {
-	const folder = req.body.name;
-	console.log(folder);
-	Folders.findOneAndUpdate(
-		{ name: folder },
-		{ news: req.params.newsId },
-		{ upsert: true }
-	)
-		.then(folder => {
-			console.log("this is the folder=> ", folder)
-			folder.populate("news");
-			res.json(folder);
-		})
+module.exports.listNewsInFolder = (req, res, next) => {
+	const folder = req.params.folderId;
+
+	News.find({ folder: folder })
+		.then(news => res.json(news))
 		.catch(error => console.log(error));
+};
+
+module.exports.addNewsToFolder = (req, res, next) => {
+	const folder = req.params.folderId;
+	console.log("this is the data that reaches here => ", req.body, req.params);
+	const {
+		content,
+		description,
+		publishedAt,
+		source,
+		title,
+		url,
+		urlToImage,
+	} = req.body[0];
+	const news = new News({
+		content: content,
+		description: description,
+		date: publishedAt,
+		source_name: source.name,
+		headline: title,
+		url: url,
+		image: urlToImage,
+	});
+
+	news.save().then(news => {
+		console.log("this is the news=> ", news);
+		Folders.findByIdAndUpdate(
+			folder,
+			{ $push: { news: news } },
+			{ upsert: true },
+			function(error, updatedDocument) {
+				news
+					.save()
+					.then(news => res.json(news))
+					.catch(error => console.log(error));
+			}
+		);
+	});
 };
 
 module.exports.deleteNews = (req, res, next) => {

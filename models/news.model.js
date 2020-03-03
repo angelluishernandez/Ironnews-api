@@ -35,7 +35,7 @@ const newsSchema = new mongoose.Schema({
 	},
 	readed: {
 		type: Boolean,
-		required: true,
+		// required: true,
 	},
 	notes: {
 		type: String,

@@ -25,6 +25,17 @@ router.get(
 	newsController.listNews
 );
 router.post(
+	"/news/:folderId/",
+	authMiddleware.isAuthenticated,
+	newsController.addNewsToFolder
+);
+router.get(
+	"/news/:folderId/newslist",
+	authMiddleware.isAuthenticated,
+	authMiddleware.isCurrentUser, 
+	newsController.listNewsInFolder 
+)
+router.post(
 	"/news/:id/add-news",
 	authMiddleware.isAuthenticated,
 	authMiddleware.isCurrentUser,
@@ -48,10 +59,5 @@ router.delete(
 	authMiddleware.isCurrentUser,
 	newsController.deleteNews
 );
-router.post(
-	"/news/:id/:newsId/add-to-folder",
-	authMiddleware.isAuthenticated,
-	authMiddleware.isCurrentUser,
-	newsController.addNewsToFolder
-);
+
 module.exports = router;
