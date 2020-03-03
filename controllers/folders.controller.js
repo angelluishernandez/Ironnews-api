@@ -6,9 +6,12 @@ const createError = require("http-errors");
 module.exports.listFolders = (req, res, next) => {
 	const user = req.params.id;
 
-	User.findById(user)
+	Folder.find({user: user})
 		.populate("folders")
-		.then(user => res.json(user.folders))
+		.then(folders => {
+			console.log("this is the user=> ", folders);
+			res.json(folders);
+		})
 		.catch(error => console.log(error));
 };
 
@@ -43,13 +46,11 @@ module.exports.addFolder = (req, res, next) => {
 };
 
 module.exports.folderDetails = (req, res, next) => {
-
-
-		Folder.findById(req.params.folderId)
-			.populate("user")
-			.populate("news")
-			.then(response => res.json(response))
-			.catch(error => console.log(error));
+	Folder.findById(req.params.folderId)
+		.populate("user")
+		.populate("news")
+		.then(response => res.json(response))
+		.catch(error => console.log(error));
 };
 
 module.exports.updateFolder = (req, res, next) => {
@@ -63,7 +64,9 @@ module.exports.updateFolder = (req, res, next) => {
 };
 
 module.exports.deleteFolder = (req, res, next) => {
-	Folder.deleteOne(req.params.folderId)
-		.then(res => res.status(200).send("The folder was deleted succesfully"))
+	Folder.deleteOne({"_id": req.params.folderId})
+		.then(response => {
+			console.log("this is the res =>", response)
+			res.send("The folder was deleted succesfully")})
 		.catch(error => console.log(error));
 };
