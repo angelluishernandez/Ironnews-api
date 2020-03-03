@@ -43,7 +43,7 @@ module.exports.getTopHeadlines = (req, res, next) => {
 			from: formatedCurrentDate,
 			to: formatedYesterday,
 			sortBy: sortBy ,
-			pageSize: 100,
+			pageSize: 20,
 		})
 		.then(articles => {
 			res.status(200).json(articles);
@@ -51,17 +51,20 @@ module.exports.getTopHeadlines = (req, res, next) => {
 		.catch(error => console.log(createError(error)));
 };
 
-module.exports.everything = (req, res, next) => {
+module.exports.getEverything = (req, res, next) => {
 	const { query, qInTitle, lenguage, source, from, to, sortBy } = req.body;
+	console.log("this is the body=>", req.body)
+
 	newsapi.v2
 		.everything({
 			q: query,
-			qInTitle: qInTitle ? qInTitle : "",
-			language: lenguage ? lenguage : "",
-			source: source ? source : "",
-			from: from ? from : "",
-			to: to ? from : "",
-			sortBy: sortBy ? sortBy : "",
+			qInTitle: qInTitle,
+			language: lenguage, 
+			source: source, 
+			from: from, 
+			to: to, 
+			sortBy: sortBy, 
+			pageSize: 100
 		})
 		.then(articles => {
 			res.status(200).json(articles);

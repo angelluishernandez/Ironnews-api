@@ -13,11 +13,10 @@ router.post(
 	authMiddleware.isAuthenticated,
 	newsAPIController.getTopHeadlines
 );
-router.get(
+router.post(
 	"/news/everything",
 	authMiddleware.isAuthenticated,
-	authMiddleware.isCurrentUser,
-	newsAPIController.everything
+	newsAPIController.getEverything
 );
 router.get(
 	"/news/:id",
