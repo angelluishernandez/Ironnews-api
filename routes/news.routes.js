@@ -22,7 +22,7 @@ router.get(
 	"/news/:id",
 	authMiddleware.isAuthenticated,
 	authMiddleware.isCurrentUser,
-	newsController.listNews
+	newsController.listNewsAll
 );
 router.post(
 	"/news/:folderId/",
@@ -30,11 +30,10 @@ router.post(
 	newsController.addNewsToFolder
 );
 router.get(
-	"/news/:folderId/newslist",
+	"/folder/:folderId/newslist",
 	authMiddleware.isAuthenticated,
-	authMiddleware.isCurrentUser, 
-	newsController.listNewsInFolder 
-)
+	newsController.listNews
+);
 router.post(
 	"/news/:id/add-news",
 	authMiddleware.isAuthenticated,

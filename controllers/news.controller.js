@@ -4,9 +4,13 @@ const Folders = require("../models/folder.model");
 const createError = require("http-errors");
 
 module.exports.listNews = (req, res, next) => {
-	News.find({ folder: req.params.fodlerId })
+	const folder = req.params.folderId;
+	News.find({ folder: folder })
 		.populate("user")
-		.then(response => res.json(response))
+		.then(response => {
+			console.log(response);
+			res.json(response);
+		})
 		.catch(error => console.log(error));
 };
 
@@ -85,7 +89,7 @@ module.exports.editNews = (req, res, next) => {
 		.catch(error => next(error));
 };
 
-module.exports.listNewsInFolder = (req, res, next) => {
+module.exports.listNewsAll = (req, res, next) => {
 	const folder = req.params.folderId;
 
 	News.find({ folder: folder })
@@ -113,6 +117,7 @@ module.exports.addNewsToFolder = (req, res, next) => {
 		headline: title,
 		url: url,
 		image: urlToImage,
+		folder: folder,
 	});
 
 	news.save().then(news => {

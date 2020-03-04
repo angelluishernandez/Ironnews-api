@@ -8,6 +8,7 @@ const newsSchema = new mongoose.Schema({
 	folder: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Folders",
+		
 	},
 	source_name: {
 		type: String,
