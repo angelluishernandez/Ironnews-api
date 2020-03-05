@@ -5,8 +5,8 @@ const createError = require("http-errors");
 
 module.exports.listNews = (req, res, next) => {
 	const folder = req.params.folderId;
+	console.log("req.params en list news=>", req.params)
 	News.find({ folder: folder })
-		.populate("user")
 		.then(response => {
 			console.log(response);
 			res.json(response);

@@ -52,14 +52,14 @@ module.exports.getTopHeadlines = (req, res, next) => {
 };
 
 module.exports.getEverything = (req, res, next) => {
-	const { query, qInTitle, lenguage, source, from, to, sortBy } = req.body;
+	const { query, qInTitle, language, source, from, to, sortBy } = req.body;
 	console.log("this is the body=>", req.body)
 
 	newsapi.v2
 		.everything({
 			q: query,
 			qInTitle: qInTitle,
-			language: lenguage, 
+			language: language, 
 			source: source, 
 			from: from, 
 			to: to, 
