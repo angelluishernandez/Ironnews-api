@@ -1,7 +1,7 @@
 const cors = require('cors')
 
 const corsMiddleware = cors({
-	origin: 'http://localhost:3000',
+	origin: process.env.MONGODB_URI,
 	allowedHeaders: ['Content-Type', 'Origin'], 
 	credentials: true
 })
