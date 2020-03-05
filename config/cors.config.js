@@ -1,7 +1,7 @@
 const cors = require('cors')
 
 const corsMiddleware = cors({
-	origin: "https://ironnewsapp.herokuapp.com/",
+	origin: ["https://ironnewsapp.herokuapp.com/"],
 	allowedHeaders: ['Content-Type', 'Origin'], 
 	credentials: true
 })
