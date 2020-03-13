@@ -40,6 +40,7 @@ app.use('/', router);
 app.use("/", require("./routes/users.routes"))
 app.use("/", require("./routes/news.routes"))
 app.use("/", require("./routes/folders.routes"))
+app.use("/", require("./routes/sources.routes"))
 
 
 // catch 404 and forward to error handler

@@ -6,7 +6,6 @@ const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
 // LIST USERS
 
 module.exports.landing = (req, res, next) => {
-	console.log("current user custom => ", req.session.user.customCategories)
 	newsapi.v2
 		.topHeadlines({
 			category: req.session.user.customCategories,
@@ -28,7 +27,6 @@ module.exports.create = (req, res, next) => {
 		categories: req.body.categories,
 		customCategories: req.body.customCategories,
 	});
-	console.log("=====================================");
 	user
 		.save()
 		.then(user => {
