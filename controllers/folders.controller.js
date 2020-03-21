@@ -9,7 +9,6 @@ module.exports.listFolders = (req, res, next) => {
 	Folder.find({user: user})
 		.populate("folders")
 		.then(folders => {
-			console.log("this is the user=> ", folders);
 			res.json(folders);
 		})
 		.catch(error => console.log(error));
@@ -24,12 +23,10 @@ module.exports.addFolder = (req, res, next) => {
 		news: req.body.news,
 	});
 
-	console.log(folder);
 
 	folder
 		.save()
 		.then(folder => {
-			console.log(folder);
 			User.findByIdAndUpdate(
 				req.params.id,
 				{ $push: { folders: folder } },

@@ -9,10 +9,13 @@ module.exports.getSources = (req, res, next) => {
 
 	newsapi.v2
 		.sources({
-			category: category,
-			language: language,
+			category,
+			language,
 			country: country,
 		})
-		.then(sources => res.status(200).json(sources))
+		.then(response => {
+			console.log(response.sources);
+			res.status(200).json(response.sources);
+		})
 		.catch(error => console.log(error));
 };
