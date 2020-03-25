@@ -3,10 +3,19 @@ const User = require("../models/user.model");
 const Folder = require("../models/folder.model");
 const createError = require("http-errors");
 
+module.exports.findAllFolders = (req, res, next) => {
+	console.log("entra=> ");
+	Folder.find()
+		.then(folders => {
+			res.json(folders);
+		})
+		.catch(error => console.log(error));
+};
+
 module.exports.listFolders = (req, res, next) => {
 	const user = req.params.id;
 
-	Folder.find({user: user})
+	Folder.find({ user: user })
 		.populate("folders")
 		.then(folders => {
 			res.json(folders);
@@ -22,7 +31,6 @@ module.exports.addFolder = (req, res, next) => {
 		user: req.params.id,
 		news: req.body.news,
 	});
-
 
 	folder
 		.save()
@@ -61,9 +69,10 @@ module.exports.updateFolder = (req, res, next) => {
 };
 
 module.exports.deleteFolder = (req, res, next) => {
-	Folder.deleteOne({"_id": req.params.folderId})
+	Folder.deleteOne({ _id: req.params.folderId })
 		.then(response => {
-			console.log("this is the res =>", response)
-			res.send("The folder was deleted succesfully")})
+			console.log("this is the res =>", response);
+			res.send("The folder was deleted succesfully");
+		})
 		.catch(error => console.log(error));
 };

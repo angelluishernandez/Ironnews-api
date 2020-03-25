@@ -5,6 +5,8 @@ const authMiddleware = require("../middlewares/auth.middleware");
 const upload = require("../config/cloudinary.config");
 const fetch = require("node-fetch");
 
+router.get("/findAllFolders", foldersController.findAllFolders)
+
 router.get(
 	"/folders/:id",
 	authMiddleware.isAuthenticated,
