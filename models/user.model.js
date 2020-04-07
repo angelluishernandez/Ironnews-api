@@ -30,14 +30,13 @@ const userSchema = new mongoose.Schema(
 			type: String,
 		},
 
-		// Another model for organizations should be included later on
-		organization: {
+		groups: {
 			type: String,
 			// required: true,
 		},
 		// Another model for organizations should be included later on
 
-		collaborators: {
+		friends: {
 			type: String,
 		},
 		categories: {
@@ -53,6 +52,12 @@ const userSchema = new mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "News",
 		},
+
+		sources: {
+			type: mongoose.Schema.Types.ObjectId, 
+			ref: "Sources"
+		}
+	
 	},
 	{ timestamps: true }
 );

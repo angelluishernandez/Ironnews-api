@@ -39,7 +39,7 @@ module.exports.create = (req, res, next) => {
 //USER LOGIN
 
 module.exports.doLogin = (req, res, next) => {
-	console.log(req.session.user);
+	console.log(req.body);
 	const { email, password } = req.body;
 	if (!email || !password) {
 		throw createError(400, "missing credentials");
@@ -48,6 +48,7 @@ module.exports.doLogin = (req, res, next) => {
 
 	User.findOne({ email: email })
 		.populate("folders")
+		.populate("sources")
 		.then(user => {
 			if (!user) {
 				throw createError(404, "user not found");

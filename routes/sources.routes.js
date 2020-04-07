@@ -5,9 +5,8 @@ const authMiddleware = require("../middlewares/auth.middleware");
 const upload = require("../config/cloudinary.config");
 const fetch = require("node-fetch");
 
-router.post(
-	"/sources/get-sources",
-	sourcesController.getSources
-);
+router.post("/sources/get-sources", sourcesController.getSources);
+router.get("/sources/:userId", sourcesController.listUserSources);
+router.post("/sources/:userId/addsources", sourcesController.addSourcesToUser);
 
-module.exports = router
+module.exports = router;
