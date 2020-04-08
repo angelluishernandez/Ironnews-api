@@ -6,13 +6,15 @@ const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
 // List Sources
 
 module.exports.getSources = (req, res, next) => {
-	const { category, language, country } = req.body;
+console.log(req.body)
+	console.log("==============================")
+
+
 
 	newsapi.v2
 		.sources({
-			category,
-			language,
-			country: country,
+			category: req.body.category,
+			language: req.body.language, 
 		})
 		.then((response) => {
 			res.status(200).json(response.sources);
