@@ -6,15 +6,13 @@ const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
 // List Sources
 
 module.exports.getSources = (req, res, next) => {
-console.log(req.body)
-	console.log("==============================")
-
-
+	console.log(req.body);
+	console.log("==============================");
 
 	newsapi.v2
 		.sources({
 			category: req.body.category,
-			language: req.body.language, 
+			language: req.body.language,
 		})
 		.then((response) => {
 			res.status(200).json(response.sources);
@@ -23,9 +21,9 @@ console.log(req.body)
 };
 
 module.exports.addSourcesToUser = (req, res, next) => {
-	console.log(req.params.userId)
+	console.log(req.params.userId);
 	req.body.forEach((source) => {
-		const { name, category, country, language, url } = source;
+		const { name, category, country, language, url, idFromAPI } = source;
 
 		const sourceData = new Sources({
 			name,
@@ -33,6 +31,7 @@ module.exports.addSourcesToUser = (req, res, next) => {
 			country,
 			language,
 			url,
+			idFromAPI,
 			user: req.params.userId,
 		});
 		console.log("=======================", sourceData);
@@ -55,5 +54,23 @@ module.exports.addSourcesToUser = (req, res, next) => {
 module.exports.listUserSources = (req, res, next) => {
 	Sources.find({ user: req.params.userId })
 		.then((sources) => res.json(sources))
+		.catch((error) => console.log(error));
+};
+
+module.exports.getSourceNews = (req, res, next) => {
+	console.log(req.body);
+	const getSourcesIds = (source) => sourcesArr.push(source.idFromAPI);
+	const sources = req.body.sources;
+	sources.forEach((source) => getSourcesIds(source));
+	const sourcesArr = [];
+	newsapi.v2
+		.everything({
+			q: "",
+			sources: [...sourcesArr],
+		})
+		.then((news) => {
+			console.log(news);
+			res.status(200).json(news);
+		})
 		.catch((error) => console.log(error));
 };

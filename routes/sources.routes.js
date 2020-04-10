@@ -8,5 +8,6 @@ const fetch = require("node-fetch");
 router.post("/sources/get-sources", sourcesController.getSources);
 router.get("/sources/:userId", sourcesController.listUserSources);
 router.post("/sources/:userId/addsources", sourcesController.addSourcesToUser);
+router.post("/sources/:userId/:sourceId", sourcesController.getSourceNews)
 
 module.exports = router;

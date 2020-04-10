@@ -8,6 +8,7 @@ const sourcesSchema = new mongoose.Schema({
 	country: String,
 	language: String,
 	url: String,
+	idFromAPI: { type: String, required: true },
 	user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
