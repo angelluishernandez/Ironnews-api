@@ -22,16 +22,17 @@ module.exports.getSources = (req, res, next) => {
 
 module.exports.addSourcesToUser = (req, res, next) => {
 	console.log(req.params.userId);
-	req.body.forEach((source) => {
-		const { name, category, country, language, url, idFromAPI } = source;
 
+	req.body.forEach((source) => {
+		const { name, category, country, language, url, id } = source;
+		console.log(source);
 		const sourceData = new Sources({
 			name,
 			category,
 			country,
 			language,
 			url,
-			idFromAPI,
+			idFromAPI: id,
 			user: req.params.userId,
 		});
 		console.log("=======================", sourceData);
@@ -59,14 +60,11 @@ module.exports.listUserSources = (req, res, next) => {
 
 module.exports.getSourceNews = (req, res, next) => {
 	console.log(req.body);
-	const getSourcesIds = (source) => sourcesArr.push(source.idFromAPI);
-	const sources = req.body.sources;
-	sources.forEach((source) => getSourcesIds(source));
-	const sourcesArr = [];
 	newsapi.v2
-		.everything({
+		.topHeadlines({
 			q: "",
-			sources: [...sourcesArr],
+			language: "es",
+			sources: req.body.idFromAPI,
 		})
 		.then((news) => {
 			console.log(news);
