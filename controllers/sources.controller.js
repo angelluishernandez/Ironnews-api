@@ -6,8 +6,6 @@ const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
 // List Sources
 
 module.exports.getSources = (req, res, next) => {
-	console.log(req.body);
-	console.log("==============================");
 
 	newsapi.v2
 		.sources({
@@ -21,7 +19,6 @@ module.exports.getSources = (req, res, next) => {
 };
 
 module.exports.addSourcesToUser = (req, res, next) => {
-	console.log(req.params.userId);
 
 	req.body.forEach((source) => {
 		const { name, category, country, language, url, id } = source;
@@ -35,7 +32,6 @@ module.exports.addSourcesToUser = (req, res, next) => {
 			idFromAPI: id,
 			user: req.params.userId,
 		});
-		console.log("=======================", sourceData);
 		sourceData.save().then((source) =>
 			User.findByIdAndUpdate(
 				req.params.id,
@@ -59,16 +55,16 @@ module.exports.listUserSources = (req, res, next) => {
 };
 
 module.exports.getSourceNews = (req, res, next) => {
-	console.log(req.body);
+	console.log("================", req.body);
 	newsapi.v2
-		.topHeadlines({
-			q: "",
-			language: "es",
-			sources: req.body.idFromAPI,
+		.everything({
+			// q: "",
+			// language: "es",
+			sources: req.body.sourceId,
 		})
 		.then((news) => {
 			console.log(news);
-			res.status(200).json(news);
+			res.status(200).json(news.articles);
 		})
 		.catch((error) => console.log(error));
 };

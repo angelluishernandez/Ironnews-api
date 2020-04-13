@@ -99,7 +99,6 @@ module.exports.listNewsAll = (req, res, next) => {
 
 module.exports.addNewsToFolder = (req, res, next) => {
 	const folder = req.params.folderId;
-	console.log("this is the data that reaches here => ", req.body, req.params);
 	const {
 		content,
 		description,
@@ -108,7 +107,7 @@ module.exports.addNewsToFolder = (req, res, next) => {
 		title,
 		url,
 		urlToImage,
-	} = req.body[0];
+	} = req.body;
 	const news = new News({
 		content: content,
 		description: description,
@@ -121,7 +120,6 @@ module.exports.addNewsToFolder = (req, res, next) => {
 	});
 
 	news.save().then(news => {
-		console.log("this is the news=> ", news);
 		Folders.findByIdAndUpdate(
 			folder,
 			{ $push: { news: news } },
