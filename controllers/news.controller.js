@@ -4,14 +4,15 @@ const Folders = require("../models/folder.model");
 const createError = require("http-errors");
 
 module.exports.listNews = (req, res, next) => {
+	console.log("entra", req.params.folderId);
+
 	const folder = req.params.folderId;
-	console.log("req.params en list news=>", req.params)
 	News.find({ folder: folder })
-		.then(response => {
+		.then((response) => {
 			console.log(response);
 			res.json(response);
 		})
-		.catch(error => console.log(error));
+		.catch((error) => console.log(error));
 };
 
 module.exports.addNews = (req, res, next) => {
@@ -30,22 +31,22 @@ module.exports.addNews = (req, res, next) => {
 	console.log(news);
 	news
 		.save()
-		.then(news => {
+		.then((news) => {
 			console.log(news);
 			Users.findByIdAndUpdate(
 				req.params.id,
 				{ $push: { saved_news: news } },
 				{ upsert: true },
-				function(error, updatedUser) {
+				function (error, updatedUser) {
 					console.log(updatedUser);
 					news
 						.save()
-						.then(news => res.status(200).json(news))
-						.catch(error => console.log(error));
+						.then((news) => res.status(200).json(news))
+						.catch((error) => console.log(error));
 				}
 			);
 		})
-		.catch(error => console.log(error));
+		.catch((error) => console.log(error));
 };
 
 module.exports.newsDetails = (req, res, next) => {
@@ -54,90 +55,93 @@ module.exports.newsDetails = (req, res, next) => {
 	News.findById(news)
 		.populate("folder")
 		.populate("user")
-		.then(news => res.json(news))
-		.catch(error => console.log(error));
+		.then((news) => res.json(news))
+		.catch((error) => console.log(error));
 };
 
 module.exports.editNews = (req, res, next) => {
 	const {
-		source_name,
-		headline,
+		source,
+		title,
 		url,
-		image,
-		date,
+		urlToImage,
+		publishedAt,
 		isInFolder,
 		tags,
 		readed,
 		notes,
 	} = req.body;
 	newsModel = {
-		source_name,
-		headline,
+		source,
+		title,
 		url,
-		image,
-		date,
+		urlToImage,
+		publishedAt,
 		isInFolder: "checked" ? true : false,
 		tags,
 		readed: "readed" ? true : false,
 		notes,
 	};
 	News.findOneAndUpdate(req.params.newsId, newsModel, { new: true })
-		.then(news => {
-			console.log(news);
+		.then((news) => {
 			res.status(200).json(news);
 		})
-		.catch(error => next(error));
+		.catch((error) => next(error));
 };
 
 module.exports.listNewsAll = (req, res, next) => {
 	const folder = req.params.folderId;
 
 	News.find({ folder: folder })
-		.then(news => res.json(news))
-		.catch(error => console.log(error));
+		.then((news) => res.json(news))
+		.catch((error) => console.log(error));
 };
 
 module.exports.addNewsToFolder = (req, res, next) => {
-	const folder = req.params.folderId;
 	const {
 		content,
 		description,
 		publishedAt,
-		source,
 		title,
+		folder,
 		url,
 		urlToImage,
 	} = req.body;
-	const news = new News({
-		content: content,
-		description: description,
-		date: publishedAt,
-		source_name: source.name,
-		headline: title,
-		url: url,
-		image: urlToImage,
-		folder: folder,
-	});
 
-	news.save().then(news => {
-		Folders.findByIdAndUpdate(
-			folder,
-			{ $push: { news: news } },
-			{ upsert: true },
-			function(error, updatedDocument) {
-				news
-					.save()
-					.then(news => res.json(news))
-					.catch(error => console.log(error));
-			}
-		);
+	const news = new News({
+		content: req.body[0].content,
+		description: req.body[0].description,
+		publishedAt: req.body[0].publishedAt,
+		source: req.body[0].source,
+		title: req.body[0].title,
+		url: req.body[0].url,
+		urlToImage: req.body[0].urlToImage,
+		folder: req.params.folderId,
 	});
+	console.log("=====================================================");
+	console.log(news);
+	console.log("=====================================================");
+
+	news
+		.save()
+		.then((news) => {
+			Folders.findByIdAndUpdate(
+				folder,
+				{ $push: { news: news } },
+				{ new: true },
+				function (error, updatedDocument) {
+					news.save().then((news) => res.json(news));
+				}
+			);
+		})
+		.catch((error) => console.log(error));
 };
 
 module.exports.deleteNews = (req, res, next) => {
+	console.log(req.params);
 	News.findByIdAndRemove(req.params.newsId)
-		.then(console.log("This news has been deleted"))
-		.catch(error => {
+		.then((news) => res.status(202).json(news))
+		.catch((error) => {
 			console.log(error);
 			throw createError("This news hasn't been deleted");
 		});

@@ -8,13 +8,16 @@ const newsSchema = new mongoose.Schema({
 	folder: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Folders",
-		
 	},
-	source_name: {
+	source: {
+		type: { String },
+		required: true,
+	},
+	title: {
 		type: String,
 		required: true,
 	},
-	headline: {
+	description: {
 		type: String,
 		required: true,
 	},
@@ -22,8 +25,8 @@ const newsSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	image: String,
-	date: {
+	urlToImage: String,
+	publishedAt: {
 		type: String,
 		required: true,
 	},
