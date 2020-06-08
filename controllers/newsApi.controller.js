@@ -12,7 +12,7 @@ module.exports.landing = (req, res, next) => {
 			pageSize: 100,
 		})
 		.then((articles) => {
-			res.status(200).json(articles);
+				res.status(200).json(articles);
 		})
 		.catch((error) => console.log(error));
 };
