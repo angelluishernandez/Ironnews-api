@@ -1,4 +1,5 @@
 const cors = require("cors");
+console.log(process.env.REACT_APP_API_URL);
 
 const corsMiddleware = cors({
 	origin: process.env.REACT_APP_API_URL,
